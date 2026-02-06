@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Esta línea es CLAVE: es tu carpeta en el servidor
+  RewriteBase /~dw2t_francisco/
+
+  # Si el archivo solicitado existe, sírvelo tal cual (imágenes, css, etc)
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Si no existe, redirige todo a index.html
+  RewriteRule . /~dw2t_francisco/index.html [L]
+</IfModule>
