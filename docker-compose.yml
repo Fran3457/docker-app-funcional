@@ -1,0 +1,56 @@
+services:
+  # SERVICIO 1: Base de Datos
+  db:
+    build: ./mysql
+    container_name: gamefest_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: gamefest
+      MYSQL_USER: dw2t_francisco
+      MYSQL_PASSWORD: '12345'
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - gamefest-net
+
+  # SERVICIO 2: Servidor Web (Vue + PHP)
+  web:
+    build:
+      context: .              # El contexto es la carpeta raíz
+      dockerfile: apache/Dockerfile
+    container_name: gamefest_web
+    restart: always
+    ports:
+      - "8080:80"             # Accederemos en http://localhost:8080
+    depends_on:
+      - db                    # Espera a que la BD arranque
+    networks:
+      - gamefest-net
+
+  # --- SERVICIO 3: phpMyAdmin (NUEVO) ---
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: gamefest_pma
+    restart: always
+    environment:
+      PMA_HOST: db            # Le decimos que la BD se llama 'db'
+      PMA_PORT: 3306          # Internamente Docker usa el 3306
+      PMA_USER: dw2t_francisco
+      PMA_PASSWORD: '12345'
+    ports:
+      - "8081:80"             # Accederemos por el puerto 8081
+    depends_on:
+      - db
+    networks:
+      - gamefest-net
+
+# Volúmenes para que los datos de la BD no se borren al apagar
+volumes:
+  db_data:
+
+# Red interna para que se vean entre ellos
+networks:
+  gamefest-net:

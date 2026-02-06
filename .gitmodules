@@ -1,0 +1,9 @@
+[submodule "Reto2--Frontend"]
+	path = Reto2--Frontend
+	url = https://github.com/Asiergl/Reto2--Frontend.git
+	branch = main
+
+[submodule "Reto2--Backend"]
+	path = Reto2--Backend
+	url = https://github.com/Asiergl/Reto2--Backend.git
+	branch = main
